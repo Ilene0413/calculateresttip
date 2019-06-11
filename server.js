@@ -18,8 +18,8 @@ app.use(express.static("app/public"));
 
 // ROUTER
 // The below points our server to a series of "route" files.
-require("./routes/apiRoutes")(app);
-require("./routes/htmlRoutes")(app);
+require("./app/routes/apiRoutes")(app);
+require("./app/routes/htmlRoutes")(app);
 
 
 // Start the API server
