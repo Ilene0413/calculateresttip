@@ -23,10 +23,12 @@ module.exports = function (app) {
     let newTip = req.body;
     let tipInfo = {
       tip:0,
-      splitNum: newTip.splitTip
+      splitNum: newTip.splitTip,
+      splitAmt: 0
     }
     console.log(`billamount ${newTip.billAmount}, tipamount ${newTip.percentTip} split ${newTip.splitTip}`);
-    tipInfo.tip = (newTip.billAmount * (newTip.percentTip/100))/newTip.splitTip;
+    tipInfo.tip = (newTip.billAmount * (newTip.percentTip/100));
+    tipInfo.splitAmt = tipInfo.tip/tipInfo.splitNum;
 console.log (`tip ` + tipInfo.tip);
     res.json(tipInfo);
   });
