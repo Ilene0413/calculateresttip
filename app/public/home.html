@@ -64,7 +64,7 @@
                             <br><br>
                             <div class="form-group">
                                 <label for="percentTip">Percent Tip (required)</label>
-                                <input type="text" id="percentTip" maxlength="5" required autocomplete="on">
+                                <input type="text" id="percentTip" placeholder="numeric" maxlength="5" required autocomplete="on">
                             </div>
                             <br><br>
                             <div class="form-group">
@@ -87,17 +87,15 @@
 
     $(".submit").on("click", function (event) {
         event.preventDefault();
+        //  get the form elements
+
         let billEntered = $("#billAmount").val().trim();
         let tipEntered = $("#percentTip").val().trim();
-        //  get the form elements
         let calcTip = {
             billAmount: 0,
             percentTip: 0,
             splitTip: $("#splitTip").val().trim()
         };
-
-        console.log(`billamount = ${calcTip.billAmount}, percent = ${calcTip.percentTip}`);
-        console.log(`split = ${calcTip.splitTip}`);
 
         //validate the form input
         //all entries must have a value
@@ -122,15 +120,21 @@
             return;
         };
 
-        
+        //validate that split amount is entered
+
+        if (!calcTip.splitTip) {
+            alert("number ways to split tip must be entered - must be at least 1");
+            return;
+        }
+
         calcTip.billAmount = parseFloat(billEntered);
         calcTip.percentTip = parseFloat(tipEntered);
 
+        //input info is valid - send form input to server
 
         $.post("/api/tips", calcTip,
             function (data) {
                 //clear the modal
-                console.log(`data ` + data);
                 $("#myModal").empty();
 
                 let myModal = $("#myModal");
@@ -140,7 +144,7 @@
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <h4> Total tip:$${data.tip} </h4>
-                                    <h4>Tip is split $${data.splitNum} ways</h4> 
+                                    <h4>Tip is split ${data.splitNum} ways</h4> 
                                     <h4> Each person pays $${data.splitAmt} </h4> 
                                     <br> 
                                 </div>
