@@ -58,13 +58,13 @@
                         <form class="form-group">
                             <div>
                                 <label for="billAmount">Bill amount before tax (required)</label>
-                                <input type="number" id="billAmount" placeholder="numeric dollar amount" required
+                                <input type="text" id="billAmount" placeholder="numeric dollar amount" required
                                     autocomplete="on">
                             </div>
                             <br><br>
                             <div class="form-group">
                                 <label for="percentTip">Percent Tip (required)</label>
-                                <input type="number" id="percentTip" maxlength="5" required autocomplete="on">
+                                <input type="text" id="percentTip" maxlength="5" required autocomplete="on">
                             </div>
                             <br><br>
                             <div class="form-group">
@@ -87,26 +87,40 @@
 
     $(".submit").on("click", function (event) {
         event.preventDefault();
-
+        let billEntered = $("#billAmount").val().trim();
+        let percentEntered = $("#percentTip").val().trim();
         //  get the form elements
         let calcTip = {
-            billAmount: $("#billAmount").val().trim(),
-            percentTip: $("#percentTip").val().trim(),
+            billAmount: billEntered,
+            percentTip: percentEntered,
             splitTip: $("#splitTip").val().trim()
         };
+
         console.log(`billamount = ${calcTip.billAmount}, percent = ${calcTip.percentTip}`);
         console.log(`split = ${calcTip.splitTip}`);
-        let billAmount = parseFloat(calcTip.billAmount);
-        let percentTip = parseFloat(calcTip.percentTip);
 
         //validate the form input
         //all entries must have a value
+
+        if (!billEntered || isNaN(billEntered)) {
+            alert("bill amount must be a dollar amount")
+            return;
+        }
+        else {
+            //have a number - check that it is a whole number or only 2 places after decimal;
+            if (billEntered.includes(".") && billEntered.charAt(billEntered.length - 3) !== ".") {
+                alert("enter valid dollar amount")
+                return;
+            }
+        };
 
         if ((calcTip.billAmount === "" || calcTip.percentTip == "") ||
             (splitTip === "")) {
             alert("all fields are required");
             return;
-        }
+        };
+        let percentTip = parseFloat(calcTip.percentTip);
+
 
         $.post("/api/tips", calcTip,
             function (data) {
@@ -157,8 +171,8 @@
 
             });
 
-  
-   
+
+
     });
 
 </script>
