@@ -88,11 +88,11 @@
     $(".submit").on("click", function (event) {
         event.preventDefault();
         let billEntered = $("#billAmount").val().trim();
-        let percentEntered = $("#percentTip").val().trim();
+        let tipEntered = $("#percentTip").val().trim();
         //  get the form elements
         let calcTip = {
-            billAmount: billEntered,
-            percentTip: percentEntered,
+            billAmount: 0,
+            percentTip: 0,
             splitTip: $("#splitTip").val().trim()
         };
 
@@ -101,6 +101,8 @@
 
         //validate the form input
         //all entries must have a value
+
+        //validate bill amount - must be entered\ and have a valid dollar amount
 
         if (!billEntered || isNaN(billEntered)) {
             alert("bill amount must be a dollar amount")
@@ -113,13 +115,16 @@
                 return;
             }
         };
+        //validate tip percentage amount entered - must be entered and numeric - number of decimals does not matter
 
-        if ((calcTip.billAmount === "" || calcTip.percentTip == "") ||
-            (splitTip === "")) {
-            alert("all fields are required");
+        if (!tipEntered || isNaN(tipEntered)) {
+            alert("tip amount must be numeric");
             return;
         };
-        let percentTip = parseFloat(calcTip.percentTip);
+
+        
+        calcTip.billAmount = parseFloat(billEntered);
+        calcTip.percentTip = parseFloat(tipEntered);
 
 
         $.post("/api/tips", calcTip,
