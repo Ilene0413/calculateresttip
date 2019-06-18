@@ -22,17 +22,20 @@ module.exports = function (app) {
   app.post("/api/tips", function (req, res) {
     let newTip = req.body;
     let tipInfo = {
-      tip: 0,
+      tip: "",
       splitNum: newTip.splitTip,
-      splitAmt: 0
+      splitAmt: ""
     }
     //calculate tip amount based on dollar amount entered and percent tip
 
-    tipInfo.tip = (newTip.billAmount * (newTip.percentTip / 100));
+    let tipAmt = (newTip.billAmount * (newTip.percentTip / 100));
 
     //split the tip amount then number of ways entered
-    tipInfo.splitAmt = tipInfo.tip / tipInfo.splitNum;
+    let splitTipAmt = tipAmt / tipInfo.splitNum;
 
+    //tip amounts should be rounded to 2 decimal places
+    tipInfo.tip = tipAmt.toFixed(2);
+    tipInfo.splitAmt = splitTipAmt.toFixed(2);
     //return tip info to client side
     res.json(tipInfo);
   });
