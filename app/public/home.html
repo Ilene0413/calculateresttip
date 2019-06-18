@@ -123,7 +123,7 @@
         };
         //validate tip percentage amount entered - must be entered and numeric - number of decimals does not matter
         //tip percentage amount must be greater than zero
-        
+
         if (!tipEntered || isNaN(tipEntered)) {
             alert("tip amount must be numeric");
             return;
@@ -140,6 +140,19 @@
         if (!calcTip.splitTip) {
             alert("number ways to split tip must be entered - must be at least 1");
             return;
+        }
+        else {
+            //split number must be an integer
+            if (calcTip.splitTip.includes(".")) {
+                alert ("number of ways to split tip must be an integer");
+                return;
+            }
+            else {
+                if (calcTip.splitTip <= 0) {
+                    alert ("number of ways to split tip must be greater than 0");
+                    return;
+                }
+            }
         }
 
         calcTip.billAmount = parseFloat(billEntered);
